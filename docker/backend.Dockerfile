@@ -11,8 +11,11 @@ COPY EvStorionx.sln .
 COPY Directory.Build.props .
 
 # Copy only project files first to maximise cache reuse on restore.
-COPY src/Migration.Api/Migration.Api.csproj                   src/Migration.Api/
-COPY src/Migration.MockStorionX/Migration.MockStorionX.csproj src/Migration.MockStorionX/
+COPY src/Migration.Domain/Migration.Domain.csproj                         src/Migration.Domain/
+COPY src/Migration.Infrastructure/Migration.Infrastructure.csproj         src/Migration.Infrastructure/
+COPY src/Migration.MockEv.Generator/Migration.MockEv.Generator.csproj     src/Migration.MockEv.Generator/
+COPY src/Migration.MockStorionX/Migration.MockStorionX.csproj             src/Migration.MockStorionX/
+COPY src/Migration.Api/Migration.Api.csproj                               src/Migration.Api/
 
 RUN dotnet restore EvStorionx.sln
 

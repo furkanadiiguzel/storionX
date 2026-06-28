@@ -1,8 +1,12 @@
-
+﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{8604C8E1-5856-4D68-8145-885B4B8DB1DD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Migration.Domain", "src\Migration.Domain\Migration.Domain.csproj", "{B2708195-E986-41F6-A63E-FB7D22F99453}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -10,5 +14,14 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B2708195-E986-41F6-A63E-FB7D22F99453}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2708195-E986-41F6-A63E-FB7D22F99453}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2708195-E986-41F6-A63E-FB7D22F99453}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2708195-E986-41F6-A63E-FB7D22F99453}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B2708195-E986-41F6-A63E-FB7D22F99453} = {8604C8E1-5856-4D68-8145-885B4B8DB1DD}
 	EndGlobalSection
 EndGlobal

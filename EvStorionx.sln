@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Migration.Domain", "src\Mig
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Migration.Infrastructure", "src\Migration.Infrastructure\Migration.Infrastructure.csproj", "{AFF56D42-25FC-4B85-87E8-6CC009D3F214}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Migration.MockEv.Generator", "src\Migration.MockEv.Generator\Migration.MockEv.Generator.csproj", "{66F3FF3D-20E4-48D1-9799-19A2BEDBC334}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,18 @@ Global
 		{AFF56D42-25FC-4B85-87E8-6CC009D3F214}.Release|x64.Build.0 = Release|Any CPU
 		{AFF56D42-25FC-4B85-87E8-6CC009D3F214}.Release|x86.ActiveCfg = Release|Any CPU
 		{AFF56D42-25FC-4B85-87E8-6CC009D3F214}.Release|x86.Build.0 = Release|Any CPU
+		{66F3FF3D-20E4-48D1-9799-19A2BEDBC334}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66F3FF3D-20E4-48D1-9799-19A2BEDBC334}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66F3FF3D-20E4-48D1-9799-19A2BEDBC334}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{66F3FF3D-20E4-48D1-9799-19A2BEDBC334}.Debug|x64.Build.0 = Debug|Any CPU
+		{66F3FF3D-20E4-48D1-9799-19A2BEDBC334}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{66F3FF3D-20E4-48D1-9799-19A2BEDBC334}.Debug|x86.Build.0 = Debug|Any CPU
+		{66F3FF3D-20E4-48D1-9799-19A2BEDBC334}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66F3FF3D-20E4-48D1-9799-19A2BEDBC334}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66F3FF3D-20E4-48D1-9799-19A2BEDBC334}.Release|x64.ActiveCfg = Release|Any CPU
+		{66F3FF3D-20E4-48D1-9799-19A2BEDBC334}.Release|x64.Build.0 = Release|Any CPU
+		{66F3FF3D-20E4-48D1-9799-19A2BEDBC334}.Release|x86.ActiveCfg = Release|Any CPU
+		{66F3FF3D-20E4-48D1-9799-19A2BEDBC334}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -50,5 +64,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{B2708195-E986-41F6-A63E-FB7D22F99453} = {8604C8E1-5856-4D68-8145-885B4B8DB1DD}
 		{AFF56D42-25FC-4B85-87E8-6CC009D3F214} = {8604C8E1-5856-4D68-8145-885B4B8DB1DD}
+		{66F3FF3D-20E4-48D1-9799-19A2BEDBC334} = {8604C8E1-5856-4D68-8145-885B4B8DB1DD}
 	EndGlobalSection
 EndGlobal

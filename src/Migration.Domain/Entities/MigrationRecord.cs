@@ -1,6 +1,6 @@
-using Migration.Domain.Enums;
+using EvStorionX.Domain.Enums;
 
-namespace Migration.Domain.Entities;
+namespace EvStorionX.Domain.Entities;
 
 /// <summary>
 /// Idempotency and chain-of-custody record for a single item migration attempt.

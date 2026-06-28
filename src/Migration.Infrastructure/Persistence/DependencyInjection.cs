@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Migration.Infrastructure.Persistence.Repositories;
+using EvStorionX.Infrastructure.Persistence.Repositories;
 
-namespace Migration.Infrastructure.Persistence;
+namespace EvStorionX.Infrastructure.Persistence;
 
 /// <summary>Registers all Infrastructure services into the DI container.</summary>
 public static class DependencyInjection

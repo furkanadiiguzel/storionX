@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
-namespace Migration.Infrastructure.Persistence;
+namespace EvStorionX.Infrastructure.Persistence;
 
 /// <summary>
 /// Design-time factory — lets <c>dotnet ef</c> create a <see cref="MigrationDbContext"/>

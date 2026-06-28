@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Migration.Domain.Entities;
+using EvStorionX.Domain.Entities;
 
-namespace Migration.Infrastructure.Persistence;
+namespace EvStorionX.Infrastructure.Persistence;
 
 /// <summary>
 /// EF Core DbContext for the migration pipeline.

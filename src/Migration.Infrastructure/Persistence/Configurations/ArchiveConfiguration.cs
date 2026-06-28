@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Migration.Domain.Entities;
-using Migration.Domain.Enums;
+using EvStorionX.Domain.Entities;
+using EvStorionX.Domain.Enums;
 
-namespace Migration.Infrastructure.Persistence.Configurations;
+namespace EvStorionX.Infrastructure.Persistence.Configurations;
 
 internal sealed class ArchiveConfiguration : IEntityTypeConfiguration<Archive>
 {

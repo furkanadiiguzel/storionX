@@ -1,4 +1,4 @@
-namespace Migration.Domain.Entities;
+namespace EvStorionX.Domain.Entities;
 
 /// <summary>Immutable audit log entry capturing a single noteworthy event during a migration run.</summary>
 public sealed class AuditEvent

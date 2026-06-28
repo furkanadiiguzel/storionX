@@ -1,4 +1,4 @@
-namespace Migration.Domain.Entities;
+namespace EvStorionX.Domain.Entities;
 
 /// <summary>
 /// Tracks the last successfully completed phase of a migration run,

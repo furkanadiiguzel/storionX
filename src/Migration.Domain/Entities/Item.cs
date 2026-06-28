@@ -1,4 +1,4 @@
-namespace Migration.Domain.Entities;
+namespace EvStorionX.Domain.Entities;
 
 /// <summary>A single archived message or file item retrieved from an EV archive.</summary>
 public sealed class Item

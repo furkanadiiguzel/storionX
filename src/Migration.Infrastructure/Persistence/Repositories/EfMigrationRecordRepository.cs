@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-using Migration.Domain.Entities;
-using Migration.Domain.Enums;
-using Migration.Infrastructure.Persistence;
+using EvStorionX.Domain.Entities;
+using EvStorionX.Domain.Enums;
+using EvStorionX.Infrastructure.Persistence;
 
-namespace Migration.Infrastructure.Persistence.Repositories;
+namespace EvStorionX.Infrastructure.Persistence.Repositories;
 
 internal sealed class EfMigrationRecordRepository
     : EfRepository<MigrationRecord>, IMigrationRecordRepository

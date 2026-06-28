@@ -1,6 +1,6 @@
-using Migration.Domain.Enums;
+using EvStorionX.Domain.Enums;
 
-namespace Migration.Domain.Entities;
+namespace EvStorionX.Domain.Entities;
 
 /// <summary>Represents a single EV archive vault entry — the top-level container for migrated items.</summary>
 public sealed class Archive

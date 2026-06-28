@@ -1,4 +1,4 @@
-namespace Migration.Infrastructure.Persistence.Repositories;
+namespace EvStorionX.Infrastructure.Persistence.Repositories;
 
 /// <summary>Generic read-write repository backed by EF Core.</summary>
 public interface IRepository<T> where T : class

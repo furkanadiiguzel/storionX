@@ -1,7 +1,7 @@
 using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
 
-namespace Migration.Infrastructure.Persistence;
+namespace EvStorionX.Infrastructure.Persistence;
 
 internal static class SnakeCaseNamingExtensions
 {

@@ -1,4 +1,4 @@
-namespace Migration.Domain.Exceptions;
+namespace EvStorionX.Domain.Exceptions;
 
 /// <summary>
 /// Base exception for all domain-level migration errors.

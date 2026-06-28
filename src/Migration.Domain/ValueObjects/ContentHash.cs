@@ -1,6 +1,6 @@
 using System.Security.Cryptography;
 
-namespace Migration.Domain.ValueObjects;
+namespace EvStorionX.Domain.ValueObjects;
 
 /// <summary>
 /// Wraps a SHA-256 digest for content integrity verification of SIS parts and migrated items.

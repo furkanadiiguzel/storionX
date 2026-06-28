@@ -2,7 +2,7 @@ using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Migration.Infrastructure.Persistence;
+namespace EvStorionX.Infrastructure.Persistence;
 
 internal static class PropertyBuilderExtensions
 {

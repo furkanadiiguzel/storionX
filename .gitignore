@@ -69,6 +69,10 @@ out/
 # Docker
 docker-compose.override.yml
 
+# Generated mock data (dotnet run -- --seed N produces these)
+data/blobs/
+data/mapping.json
+
 # Misc
 *.swp
 *.swo

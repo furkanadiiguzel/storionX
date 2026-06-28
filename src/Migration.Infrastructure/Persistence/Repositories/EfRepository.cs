@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Migration.Infrastructure.Persistence;
+using EvStorionX.Infrastructure.Persistence;
 
-namespace Migration.Infrastructure.Persistence.Repositories;
+namespace EvStorionX.Infrastructure.Persistence.Repositories;
 
 /// <summary>Generic EF Core repository; specialised repositories can inherit from this.</summary>
 public class EfRepository<T> : IRepository<T> where T : class

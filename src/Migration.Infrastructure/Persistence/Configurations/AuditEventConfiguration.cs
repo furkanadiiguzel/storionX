@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Migration.Domain.Entities;
+using EvStorionX.Domain.Entities;
 
-namespace Migration.Infrastructure.Persistence.Configurations;
+namespace EvStorionX.Infrastructure.Persistence.Configurations;
 
 internal sealed class AuditEventConfiguration : IEntityTypeConfiguration<AuditEvent>
 {

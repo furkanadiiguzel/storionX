@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Migration.Domain.Entities;
-using Migration.Infrastructure.Persistence;
+using EvStorionX.Domain.Entities;
+using EvStorionX.Infrastructure.Persistence;
 
-namespace Migration.Infrastructure.Persistence.Configurations;
+namespace EvStorionX.Infrastructure.Persistence.Configurations;
 
 internal sealed class ItemConfiguration : IEntityTypeConfiguration<Item>
 {

@@ -1,4 +1,4 @@
-namespace Migration.Domain.Enums;
+namespace EvStorionX.Domain.Enums;
 
 /// <summary>Logical classification of an archive, independent of its physical type.</summary>
 public enum ArchiveClass

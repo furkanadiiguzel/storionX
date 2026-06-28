@@ -1,4 +1,4 @@
-namespace Migration.Domain.Entities;
+namespace EvStorionX.Domain.Entities;
 
 /// <summary>
 /// A Single-Instance Storage part — a deduplicated content chunk stored in the EV vault.

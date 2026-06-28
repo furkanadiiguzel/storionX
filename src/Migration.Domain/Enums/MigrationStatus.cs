@@ -1,4 +1,4 @@
-namespace Migration.Domain.Enums;
+namespace EvStorionX.Domain.Enums;
 
 /// <summary>
 /// Lifecycle state of a single item as it moves through the EV→storionX pipeline.

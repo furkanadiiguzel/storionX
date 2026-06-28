@@ -1,4 +1,4 @@
-namespace Migration.Domain.Enums;
+namespace EvStorionX.Domain.Enums;
 
 /// <summary>Physical archive kind as classified in the EV vault.</summary>
 public enum ArchiveType

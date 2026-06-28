@@ -1,4 +1,4 @@
-namespace Migration.Domain.ValueObjects;
+namespace EvStorionX.Domain.ValueObjects;
 
 /// <summary>
 /// Stable, content-addressed key that uniquely identifies a migration unit across retries.

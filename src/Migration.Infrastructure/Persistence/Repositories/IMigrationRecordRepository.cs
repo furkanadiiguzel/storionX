@@ -1,7 +1,7 @@
-using Migration.Domain.Entities;
-using Migration.Domain.Enums;
+using EvStorionX.Domain.Entities;
+using EvStorionX.Domain.Enums;
 
-namespace Migration.Infrastructure.Persistence.Repositories;
+namespace EvStorionX.Infrastructure.Persistence.Repositories;
 
 /// <summary>Domain-specific queries on top of the generic repository contract.</summary>
 public interface IMigrationRecordRepository : IRepository<MigrationRecord>

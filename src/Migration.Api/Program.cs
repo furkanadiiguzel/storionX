@@ -214,3 +214,5 @@ await app.RunAsync();
 
 // ── Request body models ───────────────────────────────────────────────────────
 internal sealed record StartRunRequest(Guid? RunId = null, bool? DryRun = null);
+
+public partial class Program { }

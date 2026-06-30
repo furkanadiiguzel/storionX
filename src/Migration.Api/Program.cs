@@ -210,6 +210,25 @@ app.MapGet("/runs/{id:guid}/reconciliation", async (
 .WithName("GetReconciliation")
 .WithSummary("Compare local migration records against storionX /stats for discrepancies.");
 
+// ── GET /runs ─────────────────────────────────────────────────────────────────
+app.MapGet("/runs", (RunTracker tracker) =>
+{
+    var runs = tracker.All().Select(e => new
+    {
+        runId     = e.RunId,
+        status    = e.Status.ToString(),
+        startedAt = e.StartedAt,
+    });
+    return Results.Ok(runs);
+})
+.WithName("ListRuns")
+.WithSummary("List all known migration runs (in-memory, resets on restart).");
+
+// ── GET /archives ─────────────────────────────────────────────────────────────
+app.MapGet("/archives", () => Results.Ok(Array.Empty<object>()))
+.WithName("ListArchives")
+.WithSummary("Placeholder: returns discovered EV archives.");
+
 await app.RunAsync();
 
 // ── Request body models ───────────────────────────────────────────────────────

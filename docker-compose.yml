@@ -56,16 +56,19 @@ services:
 
   frontend:
     build:
-      context: ./src/frontend
-      dockerfile: ../../docker/frontend.Dockerfile
+      context: ./frontend
+      dockerfile: ../docker/frontend.Dockerfile
       target: dev
     ports:
       - "5173:5173"
     volumes:
-      - ./src/frontend:/app
+      - ./frontend:/app
       - /app/node_modules
     environment:
+      VITE_API_URL: http://localhost:8080
       CHOKIDAR_USEPOLLING: "true"
+    depends_on:
+      - api
     restart: unless-stopped
 
 volumes:

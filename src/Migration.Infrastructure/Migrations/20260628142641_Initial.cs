@@ -157,10 +157,12 @@ namespace EvStorionX.Migrations
                 table: "audit_events",
                 column: "run_id");
 
+#pragma warning disable CA1861
             migrationBuilder.CreateIndex(
                 name: "ix_audit_events_run_id_event_type",
                 table: "audit_events",
                 columns: new[] { "run_id", "event_type" });
+#pragma warning restore CA1861
 
             migrationBuilder.CreateIndex(
                 name: "ix_items_archive_id",

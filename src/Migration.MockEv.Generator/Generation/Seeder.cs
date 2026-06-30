@@ -6,33 +6,36 @@ using EvStorionX.Infrastructure.Persistence;
 namespace EvStorionX.MockEv.Generator.Generation;
 
 /// <summary>Inserts generated data into MySQL using EF Core with 1 000-row batches.</summary>
-public sealed class Seeder(MigrationDbContext db, ILogger<Seeder> logger)
+public sealed partial class Seeder(MigrationDbContext db, ILogger<Seeder> logger)
 {
+    private static readonly string[] Tables =
+        ["items", "sis_parts", "archives", "migration_records", "audit_events", "run_checkpoints"];
+
     private const int BatchSize = 1_000;
 
     public async Task SeedAsync(GeneratedData data, bool reset, CancellationToken ct = default)
     {
         if (reset)
         {
-            logger.LogInformation("Resetting tables...");
-            // Truncate without FK checks (our schema has no FK constraints, but be safe).
+            LogResetting(logger);
             await db.Database.ExecuteSqlRawAsync("SET FOREIGN_KEY_CHECKS = 0", ct);
-            foreach (var table in new[] { "items", "sis_parts", "archives",
-                                          "migration_records", "audit_events", "run_checkpoints" })
+            foreach (var table in Tables)
+#pragma warning disable EF1002 // table names are internal constants, not user input
                 await db.Database.ExecuteSqlRawAsync($"TRUNCATE TABLE `{table}`", ct);
+#pragma warning restore EF1002
             await db.Database.ExecuteSqlRawAsync("SET FOREIGN_KEY_CHECKS = 1", ct);
         }
 
-        logger.LogInformation("Inserting {N} archives...", data.Archives.Count);
+        LogInserting(logger, "archives", data.Archives.Count);
         await InsertBatchedAsync(db.Archives, data.Archives, ct);
 
-        logger.LogInformation("Inserting {N} SIS parts...", data.Parts.Count);
+        LogInserting(logger, "SIS parts", data.Parts.Count);
         await InsertBatchedAsync(db.SisParts, data.Parts.Select(p => p.Part).ToList(), ct);
 
-        logger.LogInformation("Inserting {N} items...", data.Items.Count);
+        LogInserting(logger, "items", data.Items.Count);
         await InsertBatchedAsync(db.Items, data.Items, ct);
 
-        logger.LogInformation("Seeding complete.");
+        LogSeedingComplete(logger);
     }
 
     private async Task InsertBatchedAsync<T>(
@@ -42,16 +45,24 @@ public sealed class Seeder(MigrationDbContext db, ILogger<Seeder> logger)
     {
         for (int i = 0; i < entities.Count; i += BatchSize)
         {
-            var batch = entities
-                .Skip(i)
-                .Take(BatchSize)
-                .ToList();
-
+            var batch = entities.Skip(i).Take(BatchSize).ToList();
             await set.AddRangeAsync(batch, ct);
             await db.SaveChangesAsync(ct);
             db.ChangeTracker.Clear();
-
-            logger.LogDebug("  {Done}/{Total}", Math.Min(i + BatchSize, entities.Count), entities.Count);
+            var done = Math.Min(i + BatchSize, entities.Count);
+            LogBatchProgress(logger, done, entities.Count);
         }
     }
+
+    [LoggerMessage(Level = LogLevel.Information, Message = "Resetting tables...")]
+    private static partial void LogResetting(ILogger logger);
+
+    [LoggerMessage(Level = LogLevel.Information, Message = "Inserting {N} {Entity}...")]
+    private static partial void LogInserting(ILogger logger, string entity, int n);
+
+    [LoggerMessage(Level = LogLevel.Information, Message = "Seeding complete.")]
+    private static partial void LogSeedingComplete(ILogger logger);
+
+    [LoggerMessage(Level = LogLevel.Debug, Message = "  {Done}/{Total}")]
+    private static partial void LogBatchProgress(ILogger logger, int done, int total);
 }

@@ -20,6 +20,9 @@ public sealed record RehydratedPart(
     /// <summary>Hex-encoded SHA-256 hash of <see cref="Bytes"/>.</summary>
     string Sha256,
 
+    /// <summary>Size of the part in bytes.</summary>
+    long SizeBytes,
+
     /// <summary>Raw part bytes.</summary>
     ReadOnlyMemory<byte> Bytes
 );

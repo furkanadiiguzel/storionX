@@ -8,7 +8,7 @@ namespace EvStorionX.MockEv.Generator.Generation;
 /// Orphaned UPNs are intentionally absent from the mappings array — the migration
 /// pipeline will classify archives whose UPN has no mapping as <c>Orphaned</c>.
 /// </summary>
-public sealed class IdentityMapWriter(ILogger<IdentityMapWriter> logger)
+public sealed partial class IdentityMapWriter(ILogger<IdentityMapWriter> logger)
 {
     private static readonly JsonSerializerOptions JsonOpts = new() { WriteIndented = true };
 
@@ -24,12 +24,12 @@ public sealed class IdentityMapWriter(ILogger<IdentityMapWriter> logger)
 
         var doc = new
         {
-            generatedAt     = DateTime.UtcNow,
+            generatedAt      = DateTime.UtcNow,
             seed,
-            totalMappedUpns = data.IdentityMap.Count,
+            totalMappedUpns  = data.IdentityMap.Count,
             orphanedUpnCount = data.OrphanedUpns.Count,
-            orphanedUpns    = data.OrphanedUpns.OrderBy(u => u).ToArray(),
-            mappings        = data.IdentityMap
+            orphanedUpns     = data.OrphanedUpns.OrderBy(u => u).ToArray(),
+            mappings         = data.IdentityMap
                 .OrderBy(kv => kv.Key)
                 .Select(kv => new { upn = kv.Key, targetArchiveId = kv.Value })
                 .ToArray(),
@@ -38,8 +38,10 @@ public sealed class IdentityMapWriter(ILogger<IdentityMapWriter> logger)
         var json = JsonSerializer.Serialize(doc, JsonOpts);
         await File.WriteAllTextAsync(outputPath, json, ct);
 
-        logger.LogInformation(
-            "Identity map → {Path}  (mapped={M}, orphaned={O})",
-            outputPath, data.IdentityMap.Count, data.OrphanedUpns.Count);
+        LogWrote(logger, outputPath, data.IdentityMap.Count, data.OrphanedUpns.Count);
     }
+
+    [LoggerMessage(Level = LogLevel.Information,
+        Message = "Identity map → {Path}  (mapped={Mapped}, orphaned={Orphaned})")]
+    private static partial void LogWrote(ILogger logger, string path, int mapped, int orphaned);
 }

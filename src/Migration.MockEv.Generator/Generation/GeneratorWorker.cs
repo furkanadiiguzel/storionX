@@ -6,7 +6,7 @@ using EvStorionX.MockEv.Generator.Options;
 
 namespace EvStorionX.MockEv.Generator.Generation;
 
-internal sealed class GeneratorWorker(
+internal sealed partial class GeneratorWorker(
     IServiceScopeFactory scopeFactory,
     IHostApplicationLifetime lifetime,
     GeneratorOptions opts,
@@ -16,31 +16,27 @@ internal sealed class GeneratorWorker(
     {
         try
         {
-            logger.LogInformation(
-                "Starting generator — seed={Seed}, archives={A}, parts={P}, reset={R}",
-                opts.Seed, opts.Archives, opts.Parts, opts.Reset);
+            LogStarting(logger, opts.Seed, opts.Archives, opts.Parts, opts.Reset);
 
             await using var scope = scopeFactory.CreateAsyncScope();
-            var faker     = scope.ServiceProvider.GetRequiredService<EvDataFaker>();
             var seeder    = scope.ServiceProvider.GetRequiredService<Seeder>();
             var blobs     = scope.ServiceProvider.GetRequiredService<BlobWriter>();
             var mapWriter = scope.ServiceProvider.GetRequiredService<IdentityMapWriter>();
 
-            var data = faker.Generate(opts);
+            var data = EvDataFaker.Generate(opts);
 
-            logger.LogInformation(
-                "Generated {A} archives, {I} items, {P} SIS parts. Orphaned UPNs: {O}",
-                data.Archives.Count, data.Items.Count, data.Parts.Count, data.OrphanedUpns.Count);
+            LogGenerated(logger, data.Archives.Count, data.Items.Count,
+                data.Parts.Count, data.OrphanedUpns.Count);
 
             await blobs.WriteAsync(data.Parts, opts.BlobDir, stoppingToken);
             await mapWriter.WriteAsync(data, opts.BlobDir, opts.Seed, stoppingToken);
             await seeder.SeedAsync(data, opts.Reset, stoppingToken);
 
-            logger.LogInformation("All done. Exiting.");
+            LogAllDone(logger);
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Generator failed.");
+            LogFailed(logger, ex);
             Environment.ExitCode = 1;
         }
         finally
@@ -48,4 +44,18 @@ internal sealed class GeneratorWorker(
             lifetime.StopApplication();
         }
     }
+
+    [LoggerMessage(Level = LogLevel.Information,
+        Message = "Starting generator — seed={Seed}, archives={A}, parts={P}, reset={R}")]
+    private static partial void LogStarting(ILogger logger, int seed, int a, int p, bool r);
+
+    [LoggerMessage(Level = LogLevel.Information,
+        Message = "Generated {A} archives, {I} items, {P} SIS parts. Orphaned UPNs: {O}")]
+    private static partial void LogGenerated(ILogger logger, int a, int i, int p, int o);
+
+    [LoggerMessage(Level = LogLevel.Information, Message = "All done. Exiting.")]
+    private static partial void LogAllDone(ILogger logger);
+
+    [LoggerMessage(Level = LogLevel.Error, Message = "Generator failed.")]
+    private static partial void LogFailed(ILogger logger, Exception ex);
 }

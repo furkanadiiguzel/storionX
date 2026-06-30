@@ -48,7 +48,7 @@ public sealed class EvDataFaker
     private static readonly string[] MessageClasses =
         ["IPM.Note", "IPM.Note", "IPM.Note", "IPM.Note", "IPM.Appointment", "IPM.Task", "IPM.Contact"];
 
-    public GeneratedData Generate(GeneratorOptions opts)
+    public static GeneratedData Generate(GeneratorOptions opts)
     {
         var rng = new Faker("en") { Random = new Randomizer(opts.Seed) };
 
@@ -159,7 +159,7 @@ public sealed class EvDataFaker
 
     // ── Items ─────────────────────────────────────────────────────────────────
 
-    private List<Item> GenerateItems(
+    private static List<Item> GenerateItems(
         List<Archive> archives,
         GeneratorOptions opts,
         List<SisPartWithData> parts,
@@ -186,7 +186,7 @@ public sealed class EvDataFaker
         return items;
     }
 
-    private Item GenerateItem(Archive archive, List<string> partPool, Faker rng)
+    private static Item GenerateItem(Archive archive, List<string> partPool, Faker rng)
     {
         var sentRaw = rng.Date.Between(DateTime.UtcNow.AddYears(-6), DateTime.UtcNow);
         var sentUtc = DateTime.SpecifyKind(sentRaw, DateTimeKind.Utc);

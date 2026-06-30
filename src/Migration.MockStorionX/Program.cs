@@ -10,9 +10,11 @@ using Scalar.AspNetCore;
 using Serilog;
 
 // ── Bootstrap logger (used before DI is ready) ───────────────────────────────
+#pragma warning disable CA1305 // Serilog Console sink does not expose a meaningful IFormatProvider
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .CreateBootstrapLogger();
+#pragma warning restore CA1305
 
 try
 {

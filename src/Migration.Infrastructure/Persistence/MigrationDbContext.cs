@@ -11,12 +11,12 @@ public sealed class MigrationDbContext : DbContext
 {
     public MigrationDbContext(DbContextOptions<MigrationDbContext> options) : base(options) { }
 
-    public DbSet<Archive>         Archives         => Set<Archive>();
-    public DbSet<Item>            Items            => Set<Item>();
-    public DbSet<SisPart>         SisParts         => Set<SisPart>();
+    public DbSet<Archive> Archives => Set<Archive>();
+    public DbSet<Item> Items => Set<Item>();
+    public DbSet<SisPart> SisParts => Set<SisPart>();
     public DbSet<MigrationRecord> MigrationRecords => Set<MigrationRecord>();
-    public DbSet<AuditEvent>      AuditEvents      => Set<AuditEvent>();
-    public DbSet<RunCheckpoint>   RunCheckpoints   => Set<RunCheckpoint>();
+    public DbSet<AuditEvent> AuditEvents => Set<AuditEvent>();
+    public DbSet<RunCheckpoint> RunCheckpoints => Set<RunCheckpoint>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

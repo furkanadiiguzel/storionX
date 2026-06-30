@@ -13,11 +13,11 @@ public static class IngestHandler
     /// Pipeline order: rate-limit → chaos → idempotency → dedup → store.
     /// </summary>
     public static async Task<IResult> HandleAsync(
-        IngestRequest       request,
+        IngestRequest request,
         IRateLimiterFactory rateLimiter,
-        IChaosMonkey        chaos,
-        IStorionXStorage    storage,
-        CancellationToken   ct)
+        IChaosMonkey chaos,
+        IStorionXStorage storage,
+        CancellationToken ct)
     {
         // ── 1. Rate limit ─────────────────────────────────────────────────────
         using var lease = await rateLimiter.AcquireAsync(ct);

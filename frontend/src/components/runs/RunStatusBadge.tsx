@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import type { RunStatus } from "@/lib/api-types";
+import type { RunStatus } from "@/lib/types";
 
 const CONFIG: Record<RunStatus, { label: string; className: string }> = {
   Running:   { label: "Running",   className: "bg-blue-500/15 text-blue-600 dark:text-blue-400 border-blue-500/30" },

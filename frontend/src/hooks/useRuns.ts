@@ -1,6 +1,8 @@
+import { useEffect, useRef } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { api } from "@/lib/api";
-import type { RunDetail, RunListItem, StartRunRequest } from "@/lib/api-types";
+import type { RunDetail, RunListItem, StartRunRequest } from "@/lib/types";
 
 const RUNS_KEY = ["runs"] as const;
 
@@ -16,12 +18,27 @@ export function useRuns() {
 }
 
 export function useRun(runId: string) {
-  return useQuery({
+  const prevStatusRef = useRef<string | null>(null);
+
+  const query = useQuery({
     queryKey: [...RUNS_KEY, runId],
     queryFn: () => api.get<RunDetail>(`/runs/${runId}`).then((r) => r.data),
-    refetchInterval: (query) =>
-      query.state.data?.status === "Running" ? 2000 : false,
+    refetchInterval: (q) => (q.state.data?.status === "Running" ? 2000 : false),
   });
+
+  useEffect(() => {
+    const status = query.data?.status;
+    if (!status) return;
+    const prev = prevStatusRef.current;
+    if (prev === "Running" && status === "Completed") {
+      toast.success("Migration completed", { description: `Run ${runId.slice(0, 8)}… finished.` });
+    } else if (prev === "Running" && status === "Failed") {
+      toast.error("Migration failed", { description: `Run ${runId.slice(0, 8)}… encountered an error.` });
+    }
+    prevStatusRef.current = status;
+  }, [query.data?.status, runId]);
+
+  return query;
 }
 
 export function useCreateRun() {

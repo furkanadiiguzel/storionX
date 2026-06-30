@@ -5,7 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
-import type { AuditEvent } from "@/lib/api-types";
+import type { AuditEvent } from "@/lib/types";
 
 const EVENT_COLORS: Record<string, string> = {
   RunStarted:         "bg-blue-500/10 text-blue-700 dark:text-blue-300",

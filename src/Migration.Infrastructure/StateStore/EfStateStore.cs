@@ -29,9 +29,9 @@ public sealed class EfStateStore(
         var now = timeProvider.GetUtcNow().UtcDateTime;
 
         // Key format: ev:<vaultStore>:<archiveId>:<itemId>
-        var parts     = keyStr.Split(':', 4);
+        var parts = keyStr.Split(':', 4);
         var archiveId = parts[2];
-        var itemId    = parts[3];
+        var itemId = parts[3];
 
         // MySQL UPSERT: insert on first success; update counters on idempotent replay
         await db.Database.ExecuteSqlInterpolatedAsync(

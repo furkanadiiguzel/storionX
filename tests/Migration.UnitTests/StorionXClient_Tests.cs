@@ -30,8 +30,8 @@ public sealed class StorionXClient_Tests
     {
         var body = JsonSerializer.Serialize(new
         {
-            targetId     = "tgt-1",
-            deduped      = alreadyPresent,
+            targetId = "tgt-1",
+            deduped = alreadyPresent,
             alreadyPresent,
         });
         return new HttpResponseMessage(HttpStatusCode.OK)
@@ -54,10 +54,10 @@ public sealed class StorionXClient_Tests
         services.AddLogging();
         services.Configure<StorionXClientOptions>(o =>
         {
-            o.BaseUrl                     = "http://test-host";
-            o.MaxRetryAttempts            = maxRetryAttempts;
-            o.BaseDelayMs                 = 0;
-            o.CircuitBreakerFailureRatio  = 1.0;
+            o.BaseUrl = "http://test-host";
+            o.MaxRetryAttempts = maxRetryAttempts;
+            o.BaseDelayMs = 0;
+            o.CircuitBreakerFailureRatio = 1.0;
             o.CircuitBreakerSamplingSeconds = 300;
         });
 
@@ -72,23 +72,23 @@ public sealed class StorionXClient_Tests
 
                 // Retry — same predicate as production, but 0ms delay so tests don't sleep
                 o.Retry.MaxRetryAttempts = opts.MaxRetryAttempts;
-                o.Retry.Delay            = TimeSpan.Zero;
-                o.Retry.BackoffType      = DelayBackoffType.Constant;
-                o.Retry.UseJitter        = false;
-                o.Retry.DelayGenerator   = null;  // don't honour Retry-After in unit tests
-                o.Retry.ShouldHandle     = static args => ValueTask.FromResult(
+                o.Retry.Delay = TimeSpan.Zero;
+                o.Retry.BackoffType = DelayBackoffType.Constant;
+                o.Retry.UseJitter = false;
+                o.Retry.DelayGenerator = null;  // don't honour Retry-After in unit tests
+                o.Retry.ShouldHandle = static args => ValueTask.FromResult(
                     args.Outcome.Result is { StatusCode: HttpStatusCode.TooManyRequests }
                                        or { StatusCode: HttpStatusCode.ServiceUnavailable }
                     || args.Outcome.Exception is HttpRequestException);
 
                 // Circuit breaker — effectively disabled: requires 1000 calls to sample
                 o.CircuitBreaker.MinimumThroughput = 1000;
-                o.CircuitBreaker.SamplingDuration  = TimeSpan.FromSeconds(300);
-                o.CircuitBreaker.FailureRatio      = 1.0;
+                o.CircuitBreaker.SamplingDuration = TimeSpan.FromSeconds(300);
+                o.CircuitBreaker.FailureRatio = 1.0;
 
                 // Timeouts — generous so the fake handler never triggers them
                 o.TotalRequestTimeout.Timeout = TimeSpan.FromSeconds(30);
-                o.AttemptTimeout.Timeout      = TimeSpan.FromSeconds(30);
+                o.AttemptTimeout.Timeout = TimeSpan.FromSeconds(30);
             });
 
         return services.BuildServiceProvider().GetRequiredService<IStorionXClient>();
@@ -96,13 +96,13 @@ public sealed class StorionXClient_Tests
 
     private static StorionXMessage AnyMessage() => new(
         IdempotencyKey: "ev:v:a:i",
-        TargetArchive:  "user_mailbox:alice@contoso.com",
-        ArchiveClass:   "user_mailbox",
-        Source:         new MessageSource("EnterpriseVault", "arch1", "item1", "vault1"),
-        Metadata:       new Dictionary<string, string>(),
-        Retention:      new RetentionPolicy("Standard-7Y", null),
-        LegalHold:      false,
-        Content:        new MessageContent([new MessagePart("p1", new string('a', 64), 1)]),
+        TargetArchive: "user_mailbox:alice@contoso.com",
+        ArchiveClass: "user_mailbox",
+        Source: new MessageSource("EnterpriseVault", "arch1", "item1", "vault1"),
+        Metadata: new Dictionary<string, string>(),
+        Retention: new RetentionPolicy("Standard-7Y", null),
+        LegalHold: false,
+        Content: new MessageContent([new MessagePart("p1", new string('a', 64), 1)]),
         ChainOfCustody: new ChainOfCustody(DateTime.UtcNow, Guid.NewGuid(), "1.0.0")
     );
 
@@ -135,7 +135,7 @@ public sealed class StorionXClient_Tests
             Status(HttpStatusCode.TooManyRequests),
             Status(HttpStatusCode.TooManyRequests));
 
-        var act    = () => sut.IngestAsync(AnyMessage(), CancellationToken.None);
+        var act = () => sut.IngestAsync(AnyMessage(), CancellationToken.None);
         var result = await act.Should().NotThrowAsync();
 
         result.Which.Status.Should().Be(IngestStatus.TransientError);
@@ -156,7 +156,7 @@ public sealed class StorionXClient_Tests
     {
         var sut = BuildSut(maxRetryAttempts: 1, Status(HttpStatusCode.UnprocessableEntity));
 
-        var act    = () => sut.IngestAsync(AnyMessage(), CancellationToken.None);
+        var act = () => sut.IngestAsync(AnyMessage(), CancellationToken.None);
         var result = await act.Should().NotThrowAsync();
 
         result.Which.Status.Should().Be(IngestStatus.PermanentError);

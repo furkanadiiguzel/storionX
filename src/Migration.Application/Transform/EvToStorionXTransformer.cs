@@ -26,7 +26,7 @@ public sealed class EvToStorionXTransformer(
         Item item, Archive archive, RehydratedItem content, string targetArchive)
     {
         var archiveClassSlug = ToArchiveClassSlug(archive.Type);
-        var idempotencyKey   = IdempotencyKey.Create(archive.VaultStore, archive.ArchiveId, item.ItemId);
+        var idempotencyKey = IdempotencyKey.Create(archive.VaultStore, archive.ArchiveId, item.ItemId);
 
         var metadata = BuildMetadata(item, archive);
         var retention = new RetentionPolicy(
@@ -39,21 +39,21 @@ public sealed class EvToStorionXTransformer(
 
         return new StorionXMessage(
             IdempotencyKey: idempotencyKey,
-            TargetArchive:  targetArchive,
-            ArchiveClass:   archiveClassSlug,
+            TargetArchive: targetArchive,
+            ArchiveClass: archiveClassSlug,
             Source: new MessageSource(
-                System:    "EnterpriseVault",
+                System: "EnterpriseVault",
                 ArchiveId: archive.ArchiveId,
-                ItemId:    item.ItemId,
+                ItemId: item.ItemId,
                 VaultStore: archive.VaultStore),
-            Metadata:  metadata,
+            Metadata: metadata,
             Retention: retention,
             LegalHold: archive.LegalHold,
-            Content:   new MessageContent(parts),
+            Content: new MessageContent(parts),
             ChainOfCustody: new ChainOfCustody(
                 ExtractedAtUtc: timeProvider.GetUtcNow().UtcDateTime,
-                RunId:          _opts.RunId,
-                ToolVersion:    _opts.ToolVersion));
+                RunId: _opts.RunId,
+                ToolVersion: _opts.ToolVersion));
     }
 
     // ── Private helpers ───────────────────────────────────────────────────────
@@ -62,7 +62,7 @@ public sealed class EvToStorionXTransformer(
     {
         ArchiveType.Mailbox => "user_mailbox",
         ArchiveType.Journal => "compliance_journal",
-        ArchiveType.Fsa     => "file_archive",
+        ArchiveType.Fsa => "file_archive",
         _ => throw new ArgumentOutOfRangeException(nameof(type), type, "Unknown ArchiveType.")
     };
 
@@ -70,15 +70,15 @@ public sealed class EvToStorionXTransformer(
     {
         var dict = new Dictionary<string, string>
         {
-            ["subject"]       = item.Subject,
-            ["from"]          = item.From,
-            ["messageClass"]  = item.MessageClass,
-            ["folderPath"]    = item.FolderPath,
-            ["sentDateUtc"]   = item.SentDateUtc.ToString("O"),
+            ["subject"] = item.Subject,
+            ["from"] = item.From,
+            ["messageClass"] = item.MessageClass,
+            ["folderPath"] = item.FolderPath,
+            ["sentDateUtc"] = item.SentDateUtc.ToString("O"),
         };
 
-        if (item.To.Count > 0)  dict["to"]  = string.Join(";", item.To);
-        if (item.Cc.Count > 0)  dict["cc"]  = string.Join(";", item.Cc);
+        if (item.To.Count > 0) dict["to"] = string.Join(";", item.To);
+        if (item.Cc.Count > 0) dict["cc"] = string.Join(";", item.Cc);
         if (item.Bcc.Count > 0) dict["bcc"] = string.Join(";", item.Bcc);
 
         // Journal messages are immutable compliance copies

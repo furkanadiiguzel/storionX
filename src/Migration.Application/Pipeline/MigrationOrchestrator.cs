@@ -18,14 +18,14 @@ namespace EvStorionX.Application.Pipeline;
 /// pool of parallel workers, each running rehydrate → transform → ingest.
 /// </summary>
 public sealed partial class MigrationOrchestrator(
-    IDiscovery         discovery,
-    IIdentityMap       identityMap,
-    IPolicyEngine      policyEngine,
-    IRehydrator        rehydrator,
-    ITransformer       transformer,
-    IStorionXClient    storionXClient,
-    IStateStore        stateStore,
-    IReporter          reporter,
+    IDiscovery discovery,
+    IIdentityMap identityMap,
+    IPolicyEngine policyEngine,
+    IRehydrator rehydrator,
+    ITransformer transformer,
+    IStorionXClient storionXClient,
+    IStateStore stateStore,
+    IReporter reporter,
     ILogger<MigrationOrchestrator> logger,
     IOptionsSnapshot<OrchestratorOptions> options)
 {
@@ -71,9 +71,9 @@ public sealed partial class MigrationOrchestrator(
         var channelCapacity = _opts.MaxParallelWorkers * 4;
         var channel = Channel.CreateBounded<ItemWorkUnit>(new BoundedChannelOptions(channelCapacity)
         {
-            FullMode        = BoundedChannelFullMode.Wait,
-            SingleReader    = false,
-            SingleWriter    = true,
+            FullMode = BoundedChannelFullMode.Wait,
+            SingleReader = false,
+            SingleWriter = true,
         });
 
         // d) Producer + e) consumers — both start immediately before any await
@@ -83,7 +83,7 @@ public sealed partial class MigrationOrchestrator(
             new ParallelOptions
             {
                 MaxDegreeOfParallelism = _opts.MaxParallelWorkers,
-                CancellationToken      = ct,
+                CancellationToken = ct,
             },
             (work, workerCt) => ConsumeAsync(runId, work, workerCt));
 
@@ -95,12 +95,12 @@ public sealed partial class MigrationOrchestrator(
             Payload(new
             {
                 totalArchives = _totalArchives,
-                totalItems    = _totalItems,
-                migrated      = _migrated,
+                totalItems = _totalItems,
+                migrated = _migrated,
                 alreadyPresent = _alreadyPresent,
-                orphaned      = _orphaned,
-                skipped       = _skipped,
-                failed        = _failed,
+                orphaned = _orphaned,
+                skipped = _skipped,
+                failed = _failed,
             }), ct);
 
         LogRunCompleted(logger, runId, _migrated, _failed, _skipped);
@@ -226,8 +226,8 @@ public sealed partial class MigrationOrchestrator(
                         Payload(new
                         {
                             archiveId = work.Archive.ArchiveId,
-                            targetId  = result.TargetId,
-                            status    = result.Status.ToString(),
+                            targetId = result.TargetId,
+                            status = result.Status.ToString(),
                         }), ct);
                     Interlocked.Increment(ref _migrated);
                     break;
@@ -274,10 +274,10 @@ public sealed partial class MigrationOrchestrator(
         {
             await stateStore.SaveCheckpointAsync(new RunCheckpoint
             {
-                RunId        = runId,
-                Phase        = "Ingest",
+                RunId = runId,
+                Phase = "Ingest",
                 CreatedAtUtc = DateTime.UtcNow,
-                Metadata     = Payload(new { processedCount = processed }),
+                Metadata = Payload(new { processedCount = processed }),
             }, ct);
         }
     }
@@ -315,7 +315,7 @@ public sealed partial class MigrationOrchestrator(
         return archive.Type switch
         {
             ArchiveType.Journal => $"compliance_journal:{archive.ArchiveId}",
-            ArchiveType.Fsa     => $"file_archive:{archive.ArchiveId}",
+            ArchiveType.Fsa => $"file_archive:{archive.ArchiveId}",
             _ => $"unknown:{archive.ArchiveId}",
         };
     }
@@ -324,12 +324,12 @@ public sealed partial class MigrationOrchestrator(
         Guid runId, string eventType, string? itemId, string payload, CancellationToken ct) =>
         reporter.RecordAsync(new AuditEvent
         {
-            Id           = Guid.NewGuid(),
+            Id = Guid.NewGuid(),
             TimestampUtc = DateTime.UtcNow,
-            EventType    = eventType,
-            ItemId       = itemId,
-            Payload      = payload,
-            RunId        = runId,
+            EventType = eventType,
+            ItemId = itemId,
+            Payload = payload,
+            RunId = runId,
         }, ct);
 
     private static string Payload<T>(T obj) =>

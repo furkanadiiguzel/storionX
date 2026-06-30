@@ -18,15 +18,15 @@ public sealed class RunEntry
 
     public RunEntry(Guid runId, Task<RunSummary> task, CancellationTokenSource cts)
     {
-        RunId     = runId;
-        Task      = task;
-        Cts       = cts;
+        RunId = runId;
+        Task = task;
+        Cts = cts;
         StartedAt = DateTimeOffset.UtcNow;
 
         _ = task.ContinueWith(t =>
         {
             var s = t.IsCanceled ? RunStatus.Cancelled
-                  : t.IsFaulted  ? RunStatus.Failed
+                  : t.IsFaulted ? RunStatus.Failed
                   : RunStatus.Completed;
             Interlocked.Exchange(ref _status, (int)s);
         }, TaskScheduler.Default);

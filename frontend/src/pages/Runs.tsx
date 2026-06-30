@@ -14,7 +14,7 @@ import { TableSkeleton } from "@/components/common/LoadingSkeleton";
 import { EmptyState } from "@/components/common/EmptyState";
 import { useRuns, useResumeRun } from "@/hooks/useRuns";
 import { toast } from "sonner";
-import type { RunListItem } from "@/lib/api-types";
+import type { RunListItem, RunStatus } from "@/lib/types";
 
 function RunActions({ run }: { run: RunListItem }) {
   const resumeMutation = useResumeRun(run.runId);
@@ -72,7 +72,7 @@ function RunsTable({ data }: { data: RunListItem[] }) {
     {
       accessorKey: "status",
       header: "Status",
-      cell: ({ row }) => <RunStatusBadge status={row.original.status} />,
+      cell: ({ row }) => <RunStatusBadge status={row.original.status as RunStatus} />,
     },
     {
       id: "duration",

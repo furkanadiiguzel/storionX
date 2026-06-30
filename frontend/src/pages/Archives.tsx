@@ -5,7 +5,7 @@ import { TableSkeleton } from "@/components/common/LoadingSkeleton";
 import { EmptyState } from "@/components/common/EmptyState";
 import { useArchives } from "@/hooks/useArchives";
 import { cn } from "@/lib/utils";
-import type { Archive, ArchiveType } from "@/lib/api-types";
+import type { Archive, ArchiveType } from "@/lib/types";
 import type { ElementType } from "react";
 
 const TYPE_ICONS: Record<ArchiveType, ElementType> = {

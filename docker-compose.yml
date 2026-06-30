@@ -43,16 +43,38 @@ services:
         PROJECT_PATH: src/Migration.Api/Migration.Api.csproj
     ports:
       - "8080:8080"
+    volumes:
+      - ./data:/data:ro
     environment:
       ASPNETCORE_URLS: http://+:8080
       ASPNETCORE_ENVIRONMENT: Development
       ConnectionStrings__Default: "Server=mysql;Port=3306;Database=migration_db;User=root;Password=devpassword;"
+      StorionXClient__BaseUrl: "http://mockstorionx:8080"
     depends_on:
       mysql:
         condition: service_healthy
       mockstorionx:
         condition: service_started
     restart: unless-stopped
+
+  # One-off seed tool — run with: docker compose run --rm generator -- --seed 42
+  # profiles: [tools] keeps it out of `docker compose up` but allows `run`
+  generator:
+    build:
+      context: .
+      dockerfile: docker/backend.Dockerfile
+      target: generator
+      args:
+        PROJECT_PATH: src/Migration.MockEv.Generator/Migration.MockEv.Generator.csproj
+    volumes:
+      - ./data:/data
+    environment:
+      ConnectionStrings__Default: "Server=mysql;Port=3306;Database=migration_db;User=root;Password=devpassword;"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    profiles:
+      - tools
 
   frontend:
     build:

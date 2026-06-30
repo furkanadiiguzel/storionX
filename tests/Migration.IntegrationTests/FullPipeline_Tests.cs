@@ -16,7 +16,7 @@ namespace EvStorionX.IntegrationTests;
 [Collection("MySQL")]
 public sealed class FullPipeline_Tests(MysqlContainerFixture mysql) : IAsyncLifetime
 {
-    private WebApplicationFactory<MigrationApi::Program>?  _api;
+    private WebApplicationFactory<MigrationApi::Program>? _api;
     private WebApplicationFactory<MockStorionX::Program>? _mockStorionX;
 
     public Task InitializeAsync()
@@ -40,7 +40,7 @@ public sealed class FullPipeline_Tests(MysqlContainerFixture mysql) : IAsyncLife
 
     public async Task DisposeAsync()
     {
-        if (_api is not null)         await _api.DisposeAsync();
+        if (_api is not null) await _api.DisposeAsync();
         if (_mockStorionX is not null) await _mockStorionX.DisposeAsync();
     }
 
@@ -56,11 +56,11 @@ public sealed class FullPipeline_Tests(MysqlContainerFixture mysql) : IAsyncLife
         startResp.IsSuccessStatusCode.Should().BeTrue($"POST /runs returned {startResp.StatusCode}");
 
         var startBody = await startResp.Content.ReadFromJsonAsync<JsonElement>();
-        var runIdStr  = startBody.GetProperty("runId").GetString()!;
-        var runId     = Guid.Parse(runIdStr);
+        var runIdStr = startBody.GetProperty("runId").GetString()!;
+        var runId = Guid.Parse(runIdStr);
 
         // Poll GET /runs/{id} until the run completes (max 30s)
-        var deadline  = DateTime.UtcNow.AddSeconds(30);
+        var deadline = DateTime.UtcNow.AddSeconds(30);
         string? status = null;
         while (DateTime.UtcNow < deadline && status is not ("Completed" or "Failed"))
         {
@@ -85,7 +85,7 @@ public sealed class FullPipeline_Tests(MysqlContainerFixture mysql) : IAsyncLife
 
     private static void EnsureTestData()
     {
-        var blobsDir    = Path.Combine(AppContext.BaseDirectory, "TestData", "blobs");
+        var blobsDir = Path.Combine(AppContext.BaseDirectory, "TestData", "blobs");
         var mappingPath = Path.Combine(AppContext.BaseDirectory, "TestData", "mapping.json");
 
         Directory.CreateDirectory(blobsDir);

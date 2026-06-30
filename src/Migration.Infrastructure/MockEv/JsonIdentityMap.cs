@@ -49,7 +49,7 @@ public sealed partial class JsonIdentityMap : IIdentityMap
 
         foreach (var entry in doc.RootElement.GetProperty("mappings").EnumerateArray())
         {
-            var upn           = entry.GetProperty("upn").GetString()!;
+            var upn = entry.GetProperty("upn").GetString()!;
             var targetArchive = entry.GetProperty("targetArchiveId").GetString()!;
             dict[upn] = targetArchive;
         }

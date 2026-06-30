@@ -66,7 +66,7 @@ public sealed class IdempotencyKey_Tests
     public void Create_Then_Parse_AreEqual()
     {
         var original = IdempotencyKey.Create("myVault", "archX", "item42");
-        var parsed   = IdempotencyKey.Parse(original.ToString());
+        var parsed = IdempotencyKey.Parse(original.ToString());
 
         parsed.Should().Be(original);
     }

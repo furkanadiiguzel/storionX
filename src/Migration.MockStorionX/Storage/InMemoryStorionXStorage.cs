@@ -11,8 +11,8 @@ namespace EvStorionX.MockStorionX.Storage;
 public sealed class InMemoryStorionXStorage : IStorionXStorage
 {
     private ConcurrentDictionary<string, IngestRecord> _records = new();
-    private ConcurrentDictionary<string, StoredPart>   _parts   = new();
-    private ConcurrentDictionary<string, long>         _byArchive = new();
+    private ConcurrentDictionary<string, StoredPart> _parts = new();
+    private ConcurrentDictionary<string, long> _byArchive = new();
     private long _dedupedCount;
     private long _rejected429;
     private long _transient503;
@@ -44,23 +44,23 @@ public sealed class InMemoryStorionXStorage : IStorionXStorage
     }
 
     public StatsSnapshot GetStats() => new(
-        TotalIngested:     _records.Count,
-        UniqueParts:       _parts.Count,
-        DedupedParts:      Interlocked.Read(ref _dedupedCount),
-        ByTargetArchive:   new Dictionary<string, long>(_byArchive),
-        Rejected429Count:  Interlocked.Read(ref _rejected429),
+        TotalIngested: _records.Count,
+        UniqueParts: _parts.Count,
+        DedupedParts: Interlocked.Read(ref _dedupedCount),
+        ByTargetArchive: new Dictionary<string, long>(_byArchive),
+        Rejected429Count: Interlocked.Read(ref _rejected429),
         Transient503Count: Interlocked.Read(ref _transient503));
 
-    public void IncrementRejected429()   => Interlocked.Increment(ref _rejected429);
-    public void IncrementTransient503()  => Interlocked.Increment(ref _transient503);
+    public void IncrementRejected429() => Interlocked.Increment(ref _rejected429);
+    public void IncrementTransient503() => Interlocked.Increment(ref _transient503);
 
     public void Reset()
     {
-        _records   = new ConcurrentDictionary<string, IngestRecord>();
-        _parts     = new ConcurrentDictionary<string, StoredPart>();
+        _records = new ConcurrentDictionary<string, IngestRecord>();
+        _parts = new ConcurrentDictionary<string, StoredPart>();
         _byArchive = new ConcurrentDictionary<string, long>();
         Interlocked.Exchange(ref _dedupedCount, 0);
-        Interlocked.Exchange(ref _rejected429,  0);
+        Interlocked.Exchange(ref _rejected429, 0);
         Interlocked.Exchange(ref _transient503, 0);
     }
 

@@ -20,10 +20,10 @@ public sealed class Rehydration_Tests
 
     private static SisPart PartFor(string partId, byte[] data) => new()
     {
-        PartId    = partId,
-        Sha256    = Sha256Hex(data),
+        PartId = partId,
+        Sha256 = Sha256Hex(data),
         SizeBytes = data.Length,
-        DataRef   = partId,
+        DataRef = partId,
     };
 
     private static Rehydrator MakeSut(IPartReader reader, ICachePolicy<string, byte[]>? cache = null) =>
@@ -36,7 +36,7 @@ public sealed class Rehydration_Tests
     {
         // Arrange
         var bytes = new byte[] { 0x01, 0x02, 0x03 };
-        var part  = PartFor("part-1", bytes);
+        var part = PartFor("part-1", bytes);
 
         var mockReader = new Mock<IPartReader>();
         mockReader.Setup(r => r.ReadPartAsync("part-1", It.IsAny<CancellationToken>()))
@@ -45,7 +45,7 @@ public sealed class Rehydration_Tests
                   .ReturnsAsync(part);
 
         var item = ItemBuilder.Default().WithPartIds("part-1", "part-1", "part-1").Build();
-        var sut  = MakeSut(mockReader.Object);
+        var sut = MakeSut(mockReader.Object);
 
         // Act
         var result = await sut.RehydrateAsync(item, CancellationToken.None);
@@ -64,13 +64,13 @@ public sealed class Rehydration_Tests
     public async Task RehydrateAsync_HashMismatch_ThrowsPermanentMigrationException()
     {
         // Arrange
-        var bytes         = new byte[] { 0xAA, 0xBB };
+        var bytes = new byte[] { 0xAA, 0xBB };
         var wrongHashPart = new SisPart
         {
-            PartId    = "part-x",
-            Sha256    = new string('0', 64),   // 64 zero hex chars — guaranteed mismatch
+            PartId = "part-x",
+            Sha256 = new string('0', 64),   // 64 zero hex chars — guaranteed mismatch
             SizeBytes = bytes.Length,
-            DataRef   = "part-x",
+            DataRef = "part-x",
         };
 
         var mockReader = new Mock<IPartReader>();
@@ -80,7 +80,7 @@ public sealed class Rehydration_Tests
                   .ReturnsAsync(wrongHashPart);
 
         var item = ItemBuilder.Default().WithPartIds("part-x").Build();
-        var sut  = MakeSut(mockReader.Object);
+        var sut = MakeSut(mockReader.Object);
 
         // Act
         var act = () => sut.RehydrateAsync(item, CancellationToken.None);
@@ -106,7 +106,7 @@ public sealed class Rehydration_Tests
         mockReader.Setup(r => r.GetMetadataAsync("c", It.IsAny<CancellationToken>())).ReturnsAsync(PartFor("c", bytesC));
 
         var item = ItemBuilder.Default().WithPartIds("a", "b", "c").Build();
-        var sut  = MakeSut(mockReader.Object);
+        var sut = MakeSut(mockReader.Object);
 
         // Act
         var result = await sut.RehydrateAsync(item, CancellationToken.None);

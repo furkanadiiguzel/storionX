@@ -15,7 +15,7 @@ import { useRunAudit } from "@/hooks/useRunAudit";
 import { useReconciliation } from "@/hooks/useReconciliation";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import type { AuditEvent } from "@/lib/api-types";
+import type { AuditEvent, RunStatus } from "@/lib/types";
 
 const ERROR_EVENTS = new Set(["ItemPermanentFailed", "ItemTransientFailed", "ItemUnexpectedError"]);
 
@@ -98,7 +98,7 @@ export default function RunDetail() {
           <h1 className="text-lg font-bold font-mono truncate">{runId}</h1>
           <p className="text-xs text-muted-foreground">Started {format(new Date(data.startedAt), "PPp")}</p>
         </div>
-        <RunStatusBadge status={data.status} />
+        <RunStatusBadge status={data.status as RunStatus} />
       </div>
 
       {/* Actions */}

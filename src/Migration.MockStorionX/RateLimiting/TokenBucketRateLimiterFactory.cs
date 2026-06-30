@@ -18,12 +18,12 @@ public sealed class TokenBucketRateLimiterFactory : IRateLimiterFactory, IDispos
         var o = options.Value;
         _limiter = new TokenBucketRateLimiter(new TokenBucketRateLimiterOptions
         {
-            TokenLimit            = o.BurstCapacity,
-            TokensPerPeriod       = o.RequestsPerSecond,
-            ReplenishmentPeriod   = TimeSpan.FromSeconds(1),
-            QueueProcessingOrder  = QueueProcessingOrder.OldestFirst,
-            QueueLimit            = 0,           // reject immediately; never queue
-            AutoReplenishment     = true,
+            TokenLimit = o.BurstCapacity,
+            TokensPerPeriod = o.RequestsPerSecond,
+            ReplenishmentPeriod = TimeSpan.FromSeconds(1),
+            QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+            QueueLimit = 0,           // reject immediately; never queue
+            AutoReplenishment = true,
         });
     }
 

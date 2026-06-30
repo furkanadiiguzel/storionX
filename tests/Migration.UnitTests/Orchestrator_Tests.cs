@@ -23,7 +23,7 @@ public sealed class Orchestrator_Tests
     private sealed class FakeOptionsSnapshot<T>(T value) : IOptionsSnapshot<T>
         where T : class, new()
     {
-        public T Value         => value;
+        public T Value => value;
         public T Get(string? name) => value;
     }
 
@@ -52,7 +52,7 @@ public sealed class Orchestrator_Tests
         private readonly List<AuditEvent> _events = [];
         private readonly object _lock = new();
 
-        public IReadOnlyList<AuditEvent> Events { get { lock (_lock) return [.._events]; } }
+        public IReadOnlyList<AuditEvent> Events { get { lock (_lock) return [.. _events]; } }
 
         public Task RecordAsync(AuditEvent ev, CancellationToken ct)
         {
@@ -63,11 +63,11 @@ public sealed class Orchestrator_Tests
         public Task<RunSummary> BuildSummaryAsync(Guid runId, CancellationToken ct)
         {
             List<AuditEvent> evs;
-            lock (_lock) evs = [.._events.Where(e => e.RunId == runId)];
+            lock (_lock) evs = [.. _events.Where(e => e.RunId == runId)];
 
-            var startedAt  = evs.FirstOrDefault(e => e.EventType == "RunStarted")?.TimestampUtc ?? DateTime.UtcNow;
+            var startedAt = evs.FirstOrDefault(e => e.EventType == "RunStarted")?.TimestampUtc ?? DateTime.UtcNow;
             var finishedAt = evs.FirstOrDefault(e => e.EventType == "RunCompleted")?.TimestampUtc;
-            var payload    = evs.FirstOrDefault(e => e.EventType == "RunCompleted")?.Payload;
+            var payload = evs.FirstOrDefault(e => e.EventType == "RunCompleted")?.Payload;
 
             long totalArchives = 0, totalItems = 0, migrated = 0,
                  alreadyPresent = 0, orphaned = 0, skipped = 0, failed = 0;
@@ -76,13 +76,13 @@ public sealed class Orchestrator_Tests
             {
                 using var doc = JsonDocument.Parse(payload);
                 var root = doc.RootElement;
-                totalArchives  = GetLong(root, "totalArchives");
-                totalItems     = GetLong(root, "totalItems");
-                migrated       = GetLong(root, "migrated");
+                totalArchives = GetLong(root, "totalArchives");
+                totalItems = GetLong(root, "totalItems");
+                migrated = GetLong(root, "migrated");
                 alreadyPresent = GetLong(root, "alreadyPresent");
-                orphaned       = GetLong(root, "orphaned");
-                skipped        = GetLong(root, "skipped");
-                failed         = GetLong(root, "failed");
+                orphaned = GetLong(root, "orphaned");
+                skipped = GetLong(root, "skipped");
+                failed = GetLong(root, "failed");
             }
 
             return Task.FromResult(new RunSummary(runId, startedAt, finishedAt,
@@ -159,15 +159,15 @@ public sealed class Orchestrator_Tests
 
     private static MigrationOrchestrator MakeSut(
         FakeDiscovery discovery,
-        IStorionXClient? client     = null,
-        IStateStore?     stateStore = null,
-        InMemoryReporter? reporter  = null,
-        OrchestratorOptions? opts   = null)
+        IStorionXClient? client = null,
+        IStateStore? stateStore = null,
+        InMemoryReporter? reporter = null,
+        OrchestratorOptions? opts = null)
     {
         var effectiveOpts = opts ?? new OrchestratorOptions
         {
             MaxParallelWorkers = 2,
-            CheckpointEveryN   = 10_000,
+            CheckpointEveryN = 10_000,
         };
 
         var transformer = new EvToStorionXTransformer(
@@ -211,8 +211,8 @@ public sealed class Orchestrator_Tests
             [a1, a2, orphan],
             new Dictionary<string, IReadOnlyList<Item>>
             {
-                ["a1"]     = items1,
-                ["a2"]     = items2,
+                ["a1"] = items1,
+                ["a2"] = items2,
                 ["orphan"] = orphanItems,
             });
 
@@ -263,7 +263,7 @@ public sealed class Orchestrator_Tests
             new Dictionary<string, IReadOnlyList<Item>> { ["a1"] = items });
 
         var stateStore = new InMemoryStateStore();
-        var reporter   = new InMemoryReporter();
+        var reporter = new InMemoryReporter();
 
         // First run — populates the state store
         var summary1 = await MakeSut(discovery, stateStore: stateStore, reporter: reporter)

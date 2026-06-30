@@ -32,7 +32,7 @@ public sealed class EfReporter(
             .OrderBy(e => e.TimestampUtc)
             .ToListAsync(ct);
 
-        var startedAt  = runEvents.FirstOrDefault(e => e.EventType == "RunStarted")?.TimestampUtc
+        var startedAt = runEvents.FirstOrDefault(e => e.EventType == "RunStarted")?.TimestampUtc
                          ?? DateTime.UtcNow;
         var finishedAt = runEvents.FirstOrDefault(e => e.EventType == "RunCompleted")?.TimestampUtc;
 
@@ -42,15 +42,15 @@ public sealed class EfReporter(
         var completedPayload = runEvents.FirstOrDefault(e => e.EventType == "RunCompleted")?.Payload;
         if (completedPayload is not null)
         {
-            using var doc  = JsonDocument.Parse(completedPayload);
-            var root       = doc.RootElement;
-            totalArchives  = GetLong(root, "totalArchives");
-            totalItems     = GetLong(root, "totalItems");
-            migrated       = GetLong(root, "migrated");
+            using var doc = JsonDocument.Parse(completedPayload);
+            var root = doc.RootElement;
+            totalArchives = GetLong(root, "totalArchives");
+            totalItems = GetLong(root, "totalItems");
+            migrated = GetLong(root, "migrated");
             alreadyPresent = GetLong(root, "alreadyPresent");
-            orphaned       = GetLong(root, "orphaned");
-            skipped        = GetLong(root, "skipped");
-            failed         = GetLong(root, "failed");
+            orphaned = GetLong(root, "orphaned");
+            skipped = GetLong(root, "skipped");
+            failed = GetLong(root, "failed");
         }
 
         return new RunSummary(runId, startedAt, finishedAt, (int)totalArchives, totalItems,
@@ -70,10 +70,10 @@ public sealed class EfReporter(
             .LongCountAsync(ct);
         var dbTotal = dbMigrated + dbAlreadyPresent;
 
-        var stats         = await storionXClient.GetStatsAsync(ct);
+        var stats = await storionXClient.GetStatsAsync(ct);
         var storionXTotal = stats?.TotalIngested ?? -1L;
 
-        var missing    = new List<string>();
+        var missing = new List<string>();
         var unexpected = new List<string>();
 
         if (storionXTotal < 0)
@@ -84,12 +84,12 @@ public sealed class EfReporter(
             unexpected.Add($"{storionXTotal - dbTotal} item(s) present in storionX but exceed local migration records for run {runId}");
 
         return new ReconciliationReport(
-            RunId:              runId,
-            GeneratedAtUtc:     timeProvider.GetUtcNow().UtcDateTime,
-            MissingInTarget:    missing,
+            RunId: runId,
+            GeneratedAtUtc: timeProvider.GetUtcNow().UtcDateTime,
+            MissingInTarget: missing,
             MismatchedInTarget: [],
             UnexpectedInTarget: unexpected,
-            IsClean:            missing.Count == 0 && unexpected.Count == 0);
+            IsClean: missing.Count == 0 && unexpected.Count == 0);
     }
 
     private static long GetLong(JsonElement root, string property) =>

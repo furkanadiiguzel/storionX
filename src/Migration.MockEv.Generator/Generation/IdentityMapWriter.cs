@@ -24,12 +24,12 @@ public sealed partial class IdentityMapWriter(ILogger<IdentityMapWriter> logger)
 
         var doc = new
         {
-            generatedAt      = DateTime.UtcNow,
+            generatedAt = DateTime.UtcNow,
             seed,
-            totalMappedUpns  = data.IdentityMap.Count,
+            totalMappedUpns = data.IdentityMap.Count,
             orphanedUpnCount = data.OrphanedUpns.Count,
-            orphanedUpns     = data.OrphanedUpns.OrderBy(u => u).ToArray(),
-            mappings         = data.IdentityMap
+            orphanedUpns = data.OrphanedUpns.OrderBy(u => u).ToArray(),
+            mappings = data.IdentityMap
                 .OrderBy(kv => kv.Key)
                 .Select(kv => new { upn = kv.Key, targetArchiveId = kv.Value })
                 .ToArray(),

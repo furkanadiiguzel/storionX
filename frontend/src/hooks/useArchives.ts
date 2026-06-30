@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/api";
-import type { Archive } from "@/lib/api-types";
+import type { Archive } from "@/lib/types";
 
 export function useArchives() {
   return useQuery({

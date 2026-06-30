@@ -53,9 +53,9 @@ public sealed class EvDataFaker
         var rng = new Faker("en") { Random = new Randomizer(opts.Seed) };
 
         var partsWithData = GenerateParts(opts.Parts, rng);
-        var archives      = GenerateArchives(opts.Archives, rng);
+        var archives = GenerateArchives(opts.Archives, rng);
         var (identityMap, orphanedUpns) = BuildIdentityMap(archives, rng, opts.Seed);
-        var items         = GenerateItems(archives, opts, partsWithData, rng);
+        var items = GenerateItems(archives, opts, partsWithData, rng);
 
         return new GeneratedData(archives, items, partsWithData, identityMap, orphanedUpns);
     }
@@ -68,18 +68,18 @@ public sealed class EvDataFaker
         for (int i = 0; i < count; i++)
         {
             // Realistic attachment sizes: 1 KB – 512 KB
-            var size    = rng.Random.Int(1_024, 524_288);
-            var bytes   = rng.Random.Bytes(size);
-            var sha256  = Convert.ToHexStringLower(SHA256.HashData(bytes));
-            var partId  = $"ev-prt-{rng.Random.AlphaNumeric(12)}";
+            var size = rng.Random.Int(1_024, 524_288);
+            var bytes = rng.Random.Bytes(size);
+            var sha256 = Convert.ToHexStringLower(SHA256.HashData(bytes));
+            var partId = $"ev-prt-{rng.Random.AlphaNumeric(12)}";
             var dataRef = $"ev://vault/{rng.PickRandom(VaultStores)}/parts/{partId}.bin";
 
             var part = new SisPart
             {
-                PartId    = partId,
-                Sha256    = sha256,
+                PartId = partId,
+                Sha256 = sha256,
                 SizeBytes = size,
-                DataRef   = dataRef,
+                DataRef = dataRef,
             };
             result.Add(new SisPartWithData(part, bytes));
         }
@@ -90,7 +90,7 @@ public sealed class EvDataFaker
 
     private static List<Archive> GenerateArchives(int count, Faker rng)
     {
-        var orphanCount    = Math.Max(1, (int)Math.Ceiling(count * 0.15));
+        var orphanCount = Math.Max(1, (int)Math.Ceiling(count * 0.15));
         var legalHoldCount = Math.Max(1, (int)Math.Ceiling(count * 0.10));
 
         // Shuffle indexes so legal-hold and orphan selection is spread, not front-loaded.
@@ -104,26 +104,26 @@ public sealed class EvDataFaker
         for (int i = 0; i < count; i++)
         {
             ArchiveType type;
-            if (i == 0)      type = ArchiveType.Journal;
+            if (i == 0) type = ArchiveType.Journal;
             else if (i == 1) type = ArchiveType.Fsa;
-            else             type = rng.Random.WeightedRandom(
+            else type = rng.Random.WeightedRandom(
                                         [ArchiveType.Mailbox, ArchiveType.Journal, ArchiveType.Fsa],
                                         [80, 10, 10]);
 
             string? ownerUpn = type switch
             {
                 ArchiveType.Journal => null,
-                ArchiveType.Fsa     => null,
-                _                   => $"{rng.Internet.UserName()}" +
+                ArchiveType.Fsa => null,
+                _ => $"{rng.Internet.UserName()}" +
                                        $"@{rng.PickRandom(Providers)}",
             };
 
             result.Add(new Archive
             {
-                ArchiveId  = $"ev-arc-{rng.Random.AlphaNumeric(10)}",
-                Type       = type,
-                OwnerUpn   = ownerUpn,
-                LegalHold  = legalHoldSet.Contains(i),
+                ArchiveId = $"ev-arc-{rng.Random.AlphaNumeric(10)}",
+                Type = type,
+                OwnerUpn = ownerUpn,
+                LegalHold = legalHoldSet.Contains(i),
                 VaultStore = rng.PickRandom(VaultStores),
             });
         }
@@ -193,9 +193,9 @@ public sealed class EvDataFaker
 
         var folderPath = archive.Type switch
         {
-            ArchiveType.Fsa     => $@"\\fileserver\shares\{rng.Commerce.Department()}\{sentUtc.Year}\Q{(sentUtc.Month - 1) / 3 + 1}",
+            ArchiveType.Fsa => $@"\\fileserver\shares\{rng.Commerce.Department()}\{sentUtc.Year}\Q{(sentUtc.Month - 1) / 3 + 1}",
             ArchiveType.Journal => $"Journal\\{sentUtc:yyyy-MM}",
-            _                   => rng.PickRandom(MailboxFolders),
+            _ => rng.PickRandom(MailboxFolders),
         };
 
         var numParts = rng.Random.Int(1, 5);
@@ -221,19 +221,19 @@ public sealed class EvDataFaker
 
         return new Item
         {
-            ItemId           = $"ev-itm-{rng.Random.AlphaNumeric(14)}",
-            ArchiveId        = archive.ArchiveId,
-            FolderPath       = folderPath,
-            Subject          = GenerateSubject(rng),
-            SentDateUtc      = sentUtc,
-            From             = GenerateEmail(rng),
-            To               = to,
-            Cc               = cc,
-            Bcc              = bcc,
-            ContentPartIds   = contentPartIds,
+            ItemId = $"ev-itm-{rng.Random.AlphaNumeric(14)}",
+            ArchiveId = archive.ArchiveId,
+            FolderPath = folderPath,
+            Subject = GenerateSubject(rng),
+            SentDateUtc = sentUtc,
+            From = GenerateEmail(rng),
+            To = to,
+            Cc = cc,
+            Bcc = bcc,
+            ContentPartIds = contentPartIds,
             RetentionCategory = rng.PickRandom(RetentionCategories),
-            SizeBytes        = rng.Random.Long(2_048, 2_097_152),
-            MessageClass     = rng.PickRandom(MessageClasses),
+            SizeBytes = rng.Random.Long(2_048, 2_097_152),
+            MessageClass = rng.PickRandom(MessageClasses),
         };
     }
 

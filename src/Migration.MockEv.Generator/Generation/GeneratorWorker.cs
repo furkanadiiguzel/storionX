@@ -19,8 +19,8 @@ internal sealed partial class GeneratorWorker(
             LogStarting(logger, opts.Seed, opts.Archives, opts.Parts, opts.Reset);
 
             await using var scope = scopeFactory.CreateAsyncScope();
-            var seeder    = scope.ServiceProvider.GetRequiredService<Seeder>();
-            var blobs     = scope.ServiceProvider.GetRequiredService<BlobWriter>();
+            var seeder = scope.ServiceProvider.GetRequiredService<Seeder>();
+            var blobs = scope.ServiceProvider.GetRequiredService<BlobWriter>();
             var mapWriter = scope.ServiceProvider.GetRequiredService<IdentityMapWriter>();
 
             var data = EvDataFaker.Generate(opts);

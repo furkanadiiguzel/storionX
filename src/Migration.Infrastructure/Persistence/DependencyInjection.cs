@@ -18,10 +18,12 @@ public static class DependencyInjection
         // Pinned server version avoids a live-DB round-trip on every app start.
         var serverVersion = new MySqlServerVersion(new Version(8, 4, 0));
 
-        // AddPooledDbContextFactory supports both direct DbContext injection (Scoped)
-        // and IDbContextFactory<T> injection (Singleton) from the same pool.
+        // AddPooledDbContextFactory registers IDbContextFactory<T> only.
+        // The scoped registration below bridges the gap for services that inject DbContext directly.
         services.AddPooledDbContextFactory<MigrationDbContext>(options =>
             options.UseMySql(connectionString, serverVersion));
+        services.AddScoped(sp =>
+            sp.GetRequiredService<IDbContextFactory<MigrationDbContext>>().CreateDbContext());
 
         services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
         services.AddScoped<IMigrationRecordRepository, EfMigrationRecordRepository>();

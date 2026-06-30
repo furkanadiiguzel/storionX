@@ -12,8 +12,8 @@ namespace EvStorionX.MockStorionX.Chaos;
 public sealed class RandomChaosMonkey : IChaosMonkey
 {
     private readonly ChaosOptions _opts;
-    private readonly Random?      _seededRng; // non-null only when a seed was configured
-    private readonly object        _lock = new();
+    private readonly Random? _seededRng; // non-null only when a seed was configured
+    private readonly object _lock = new();
 
     public RandomChaosMonkey(IOptions<ChaosOptions> options)
     {

@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { format } from "date-fns";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import type { AuditEvent } from "@/lib/api-types";
+import type { AuditEvent } from "@/lib/types";
 
 interface Props { events: AuditEvent[]; className?: string; }
 

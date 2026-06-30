@@ -9,7 +9,7 @@ import { CardSkeleton, TableSkeleton } from "@/components/common/LoadingSkeleton
 import { EmptyState } from "@/components/common/EmptyState";
 import { useRuns } from "@/hooks/useRuns";
 import { useRunAudit } from "@/hooks/useRunAudit";
-import type { RunListItem } from "@/lib/api-types";
+import type { RunListItem, RunStatus } from "@/lib/types";
 import type { ElementType } from "react";
 
 function KpiCard({ title, value, sub, icon: Icon }: {
@@ -54,7 +54,7 @@ function RecentRunsTable({ runs }: { runs: RunListItem[] }) {
                 {formatDistanceToNow(new Date(run.startedAt), { addSuffix: true })}
               </td>
               <td className="px-4 py-3">
-                <RunStatusBadge status={run.status} />
+                <RunStatusBadge status={run.status as RunStatus} />
               </td>
             </tr>
           ))}

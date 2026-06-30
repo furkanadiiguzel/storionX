@@ -13,7 +13,7 @@ public sealed class Transformer_Tests
         new(Options.Create(new TransformerOptions
         {
             ToolVersion = "1.2.3",
-            RunId       = runId ?? Guid.NewGuid(),
+            RunId = runId ?? Guid.NewGuid(),
         }), TimeProvider.System);
 
     private static RehydratedItem MakeContent(string itemId, params (string id, byte[] bytes)[] parts)
@@ -32,7 +32,7 @@ public sealed class Transformer_Tests
     public void Transform_MailboxArchive_ArchiveClassIsUserMailbox()
     {
         var archive = ArchiveBuilder.Default().Build();       // Mailbox
-        var item    = ItemBuilder.Default().Build();
+        var item = ItemBuilder.Default().Build();
         var content = MakeContent(item.ItemId, ("p1", [0x01]));
 
         var msg = MakeSut().Transform(item, archive, content, "user_mailbox:alice@contoso.com");
@@ -45,7 +45,7 @@ public sealed class Transformer_Tests
     public void Transform_JournalArchive_ArchiveClassIsComplianceJournalAndImmutableMetadata()
     {
         var archive = ArchiveBuilder.Default().AsJournal().WithId("j1").Build();
-        var item    = ItemBuilder.Default().WithArchiveId("j1").Build();
+        var item = ItemBuilder.Default().WithArchiveId("j1").Build();
         var content = MakeContent(item.ItemId, ("p1", [0xFF]));
 
         var msg = MakeSut().Transform(item, archive, content, "compliance_journal:j1");
@@ -58,9 +58,9 @@ public sealed class Transformer_Tests
     [Fact]
     public void Transform_FsaArchive_ArchiveClassIsFileArchiveAndFolderPathPreserved()
     {
-        const string folder  = "Projects/2024/Q1";
+        const string folder = "Projects/2024/Q1";
         var archive = ArchiveBuilder.Default().AsFsa().WithId("fsa1").Build();
-        var item    = ItemBuilder.Default().WithArchiveId("fsa1").WithFolderPath(folder).Build();
+        var item = ItemBuilder.Default().WithArchiveId("fsa1").WithFolderPath(folder).Build();
         var content = MakeContent(item.ItemId, ("p1", [0x42]));
 
         var msg = MakeSut().Transform(item, archive, content, "file_archive:fsa1");
@@ -76,12 +76,12 @@ public sealed class Transformer_Tests
     public void Transform_RetentionCategory7Y_ExpiresUtcIsSentDatePlusSeven()
     {
         var sentDate = new DateTime(2020, 3, 15, 0, 0, 0, DateTimeKind.Utc);
-        var archive  = ArchiveBuilder.Default().Build();
-        var item     = ItemBuilder.Default()
+        var archive = ArchiveBuilder.Default().Build();
+        var item = ItemBuilder.Default()
                            .WithSentDate(sentDate)
                            .WithRetentionCategory("Legal-7Y")
                            .Build();
-        var content  = MakeContent(item.ItemId, ("p1", [0xAA]));
+        var content = MakeContent(item.ItemId, ("p1", [0xAA]));
 
         var msg = MakeSut().Transform(item, archive, content, "user_mailbox:alice@contoso.com");
 
@@ -93,7 +93,7 @@ public sealed class Transformer_Tests
     public void Transform_RetentionCategoryWithoutYears_ExpiresUtcIsNull()
     {
         var archive = ArchiveBuilder.Default().Build();
-        var item    = ItemBuilder.Default().WithRetentionCategory("NoExpiry").Build();
+        var item = ItemBuilder.Default().WithRetentionCategory("NoExpiry").Build();
         var content = MakeContent(item.ItemId, ("p1", [0x00]));
 
         var msg = MakeSut().Transform(item, archive, content, "user_mailbox:alice@contoso.com");
@@ -107,7 +107,7 @@ public sealed class Transformer_Tests
     public void Transform_JournalItemWithCcAndBcc_MetadataContainsBothFields()
     {
         var archive = ArchiveBuilder.Default().AsJournal().WithId("j2").Build();
-        var item    = ItemBuilder.Default()
+        var item = ItemBuilder.Default()
                           .WithArchiveId("j2")
                           .WithCc("cc1@x.com", "cc2@x.com")
                           .WithBcc("bcc1@x.com")
@@ -126,7 +126,7 @@ public sealed class Transformer_Tests
     public void Transform_AnyItem_IdempotencyKeyMatchesExpectedFormat()
     {
         var archive = ArchiveBuilder.Default().WithId("arch1").WithVaultStore("vaultA").Build();
-        var item    = ItemBuilder.Default().WithId("item99").WithArchiveId("arch1").Build();
+        var item = ItemBuilder.Default().WithId("item99").WithArchiveId("arch1").Build();
         var content = MakeContent(item.ItemId, ("p1", [0x01]));
 
         var msg = MakeSut().Transform(item, archive, content, "user_mailbox:alice@contoso.com");
@@ -140,7 +140,7 @@ public sealed class Transformer_Tests
     public void Transform_LegalHoldArchive_MessageLegalHoldIsTrue()
     {
         var archive = ArchiveBuilder.Default().WithLegalHold().Build();
-        var item    = ItemBuilder.Default().Build();
+        var item = ItemBuilder.Default().Build();
         var content = MakeContent(item.ItemId, ("p1", [0x01]));
 
         var msg = MakeSut().Transform(item, archive, content, "user_mailbox:alice@contoso.com");

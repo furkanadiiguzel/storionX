@@ -24,25 +24,25 @@ public static partial class StorionXClientDependencyInjection
             {
                 var opts = sp.GetRequiredService<IOptions<StorionXClientOptions>>().Value;
                 c.BaseAddress = new Uri(opts.BaseUrl);
-                c.Timeout     = TimeSpan.FromSeconds(30);
+                c.Timeout = TimeSpan.FromSeconds(30);
             })
             .AddStandardResilienceHandler()
             .Configure((HttpStandardResilienceOptions o, IServiceProvider sp) =>
             {
-                var opts   = sp.GetRequiredService<IOptions<StorionXClientOptions>>().Value;
+                var opts = sp.GetRequiredService<IOptions<StorionXClientOptions>>().Value;
                 var logger = sp.GetRequiredService<ILoggerFactory>()
                                .CreateLogger<HttpStorionXClient>();
 
                 // ── Retry ────────────────────────────────────────────────────
                 o.Retry.MaxRetryAttempts = opts.MaxRetryAttempts;
-                o.Retry.BackoffType      = DelayBackoffType.Exponential;
-                o.Retry.UseJitter        = true;
-                o.Retry.Delay            = TimeSpan.FromMilliseconds(opts.BaseDelayMs);
+                o.Retry.BackoffType = DelayBackoffType.Exponential;
+                o.Retry.UseJitter = true;
+                o.Retry.Delay = TimeSpan.FromMilliseconds(opts.BaseDelayMs);
 
                 o.Retry.ShouldHandle = args => ValueTask.FromResult(
                     args.Outcome.Result is
-                        { StatusCode: HttpStatusCode.TooManyRequests } or
-                        { StatusCode: HttpStatusCode.ServiceUnavailable }
+                { StatusCode: HttpStatusCode.TooManyRequests } or
+                { StatusCode: HttpStatusCode.ServiceUnavailable }
                     || args.Outcome.Exception is HttpRequestException);
 
                 // Honour Retry-After header when present; fall back to exponential+jitter.
@@ -65,7 +65,7 @@ public static partial class StorionXClientDependencyInjection
                 };
 
                 // ── Circuit breaker ───────────────────────────────────────────
-                o.CircuitBreaker.FailureRatio    = opts.CircuitBreakerFailureRatio;
+                o.CircuitBreaker.FailureRatio = opts.CircuitBreakerFailureRatio;
                 o.CircuitBreaker.SamplingDuration = TimeSpan.FromSeconds(opts.CircuitBreakerSamplingSeconds);
             });
 

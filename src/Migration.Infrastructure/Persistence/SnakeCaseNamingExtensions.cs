@@ -7,7 +7,7 @@ internal static class SnakeCaseNamingExtensions
 {
     // Handles sequences like "UTCDate" → "utc_date" and simple "MyField" → "my_field".
     private static readonly Regex UpperSequence = new(@"([A-Z]+)([A-Z][a-z])", RegexOptions.Compiled);
-    private static readonly Regex UpperChar     = new(@"(?<=[a-z0-9])([A-Z])",  RegexOptions.Compiled);
+    private static readonly Regex UpperChar = new(@"(?<=[a-z0-9])([A-Z])", RegexOptions.Compiled);
 
     internal static string ToSnakeCase(string? name)
     {

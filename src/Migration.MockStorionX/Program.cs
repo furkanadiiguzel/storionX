@@ -33,15 +33,15 @@ try
     builder.Services.Configure<ChaosOptions>(builder.Configuration.GetSection("Chaos"));
 
     // ── Application services ──────────────────────────────────────────────────
-    builder.Services.AddSingleton<IStorionXStorage,  InMemoryStorionXStorage>();
-    builder.Services.AddSingleton<IChaosMonkey,      RandomChaosMonkey>();
+    builder.Services.AddSingleton<IStorionXStorage, InMemoryStorionXStorage>();
+    builder.Services.AddSingleton<IChaosMonkey, RandomChaosMonkey>();
     builder.Services.AddSingleton<IRateLimiterFactory, TokenBucketRateLimiterFactory>();
 
     // ── JSON: camelCase property names ────────────────────────────────────────
     builder.Services.ConfigureHttpJsonOptions(o =>
     {
-        o.SerializerOptions.PropertyNamingPolicy        = JsonNamingPolicy.CamelCase;
-        o.SerializerOptions.DefaultIgnoreCondition      = JsonIgnoreCondition.WhenWritingNull;
+        o.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+        o.SerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
         o.SerializerOptions.PropertyNameCaseInsensitive = true;
     });
 
@@ -57,7 +57,7 @@ try
     app.UseSerilogRequestLogging();
 
     // ── Endpoints ─────────────────────────────────────────────────────────────
-    app.MapPost("/ingest",       IngestHandler.HandleAsync)
+    app.MapPost("/ingest", IngestHandler.HandleAsync)
        .WithName("Ingest")
        .WithSummary("Ingest an item into the mock storionX archive.")
        .WithDescription("Idempotent: replaying the same idempotencyKey always returns 200 without side effects.");

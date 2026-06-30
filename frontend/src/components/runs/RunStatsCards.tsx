@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle2, XCircle, SkipForward, Database } from "lucide-react";
-import type { RunSummary } from "@/lib/api-types";
+import type { RunSummary } from "@/lib/types";
 
 interface Props { summary: RunSummary; }
 
@@ -22,7 +22,7 @@ export function RunStatsCards({ summary }: Props) {
             <Icon className={cn("size-4", color)} />
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold tabular-nums">{value.toLocaleString()}</p>
+            <p className="text-2xl font-bold tabular-nums">{Number(value).toLocaleString()}</p>
           </CardContent>
         </Card>
       ))}

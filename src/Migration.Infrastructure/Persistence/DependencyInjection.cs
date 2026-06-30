@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using EvStorionX.Application.Abstractions;
 using EvStorionX.Infrastructure.Persistence.Repositories;
+using EvStorionX.Infrastructure.Reporting;
+using EvStorionX.Infrastructure.StateStore;
 
 namespace EvStorionX.Infrastructure.Persistence;
 
@@ -15,11 +18,19 @@ public static class DependencyInjection
         // Pinned server version avoids a live-DB round-trip on every app start.
         var serverVersion = new MySqlServerVersion(new Version(8, 4, 0));
 
-        services.AddDbContextPool<MigrationDbContext>(options =>
+        // AddPooledDbContextFactory supports both direct DbContext injection (Scoped)
+        // and IDbContextFactory<T> injection (Singleton) from the same pool.
+        services.AddPooledDbContextFactory<MigrationDbContext>(options =>
             options.UseMySql(connectionString, serverVersion));
 
         services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
         services.AddScoped<IMigrationRecordRepository, EfMigrationRecordRepository>();
+
+        // EfStateStore is Singleton: only depends on Singleton IDbContextFactory + TimeProvider.
+        services.AddSingleton<IStateStore, EfStateStore>();
+
+        // EfReporter is Scoped: captures IStorionXClient (Transient typed HttpClient) per scope.
+        services.AddScoped<IReporter, EfReporter>();
 
         return services;
     }

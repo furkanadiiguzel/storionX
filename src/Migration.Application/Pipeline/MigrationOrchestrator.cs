@@ -27,7 +27,7 @@ public sealed partial class MigrationOrchestrator(
     IStateStore        stateStore,
     IReporter          reporter,
     ILogger<MigrationOrchestrator> logger,
-    IOptions<OrchestratorOptions>  options)
+    IOptionsSnapshot<OrchestratorOptions> options)
 {
     private readonly OrchestratorOptions _opts = options.Value;
 

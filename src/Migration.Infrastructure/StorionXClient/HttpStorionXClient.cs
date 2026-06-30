@@ -25,6 +25,27 @@ public sealed partial class HttpStorionXClient(
     };
 
     /// <inheritdoc/>
+    public async Task<StorionXStats?> GetStatsAsync(CancellationToken ct)
+    {
+        try
+        {
+            var resp = await httpClient.GetAsync("/stats", ct);
+            if (!resp.IsSuccessStatusCode)
+            {
+                LogStatsError(logger, (int)resp.StatusCode);
+                return null;
+            }
+            return await resp.Content.ReadFromJsonAsync<StorionXStats>(JsonOpts, ct);
+        }
+        catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException
+                                       or Polly.CircuitBreaker.BrokenCircuitException)
+        {
+            LogStatsFailed(logger, ex.GetType().Name, ex);
+            return null;
+        }
+    }
+
+    /// <inheritdoc/>
     public async Task<IngestResult> IngestAsync(StorionXMessage message, CancellationToken ct)
     {
         HttpResponseMessage resp;
@@ -78,6 +99,14 @@ public sealed partial class HttpStorionXClient(
     [LoggerMessage(Level = LogLevel.Error,
         Message = "storionX request failed with {ExceptionType}")]
     private static partial void LogRequestFailed(ILogger logger, string exceptionType, Exception ex);
+
+    [LoggerMessage(Level = LogLevel.Warning,
+        Message = "storionX GET /stats returned non-success status {HttpStatus}")]
+    private static partial void LogStatsError(ILogger logger, int httpStatus);
+
+    [LoggerMessage(Level = LogLevel.Warning,
+        Message = "storionX GET /stats failed with {ExceptionType}")]
+    private static partial void LogStatsFailed(ILogger logger, string exceptionType, Exception ex);
 
     // ── Private response model (matches MockStorionX JSON shape) ─────────────
 

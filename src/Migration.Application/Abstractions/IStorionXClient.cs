@@ -10,4 +10,10 @@ public interface IStorionXClient
     /// Never throws for expected HTTP error codes — caller inspects <see cref="IngestResult.Status"/>.
     /// </summary>
     Task<IngestResult> IngestAsync(StorionXMessage message, CancellationToken ct);
+
+    /// <summary>
+    /// Retrieves aggregated statistics from storionX <c>GET /stats</c>.
+    /// Returns <see langword="null"/> when the request fails or the circuit is open.
+    /// </summary>
+    Task<StorionXStats?> GetStatsAsync(CancellationToken ct);
 }
